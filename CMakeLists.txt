@@ -15,6 +15,7 @@ list(SORT providers)
 set(GENERATED_CPP_FILE
     "#include <array>\n"
     "#include <string_view>\n"
+    "#include <algorithm>\n"
     "\n"
     "static std::array<std::string_view, ${providers_len}> const bad_providers {"
 )
@@ -41,6 +42,11 @@ set(GENERATED_CPP_FILE
     "\t\t*size = bad_providers.size()\;\n"
     "\t}\n"
     "\treturn bad_providers.data()\;\n"
+    "}\n"
+    "\n"
+    "bool is_bad_provider(std::string_view provider) noexcept\n"
+    "{\n"
+    "\treturn std::binary_search(bad_providers.begin(), bad_providers.end(), provider)\;\n"
     "}\n")
 
 set(GENERATED_HPP_FILE
@@ -49,6 +55,7 @@ set(GENERATED_HPP_FILE
     "#include <string_view>\n"
     "\n"
     "std::string_view const *get_bad_providers(std::size_t *size) noexcept\;\n"
+    "bool is_bad_provider(std::string_view provider) noexcept\;\n"
     "\n"
     "#endif\n")
 
